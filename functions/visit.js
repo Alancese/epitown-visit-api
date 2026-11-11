@@ -1,8 +1,14 @@
 // EpiTown visit tracking endpoint
+
 const SITE_ORIGIN = "https://alancese.github.io";
 
-export function onRequestGet() {
-  return new Response("ok");
+export async function onRequestGet({ env }) {
+  const headers = { "Access-Control-Allow-Origin": SITE_ORIGIN };
+  if (!env.DB) {
+    return new Response(JSON.stringify({ visits: -1, last_time: 0 }), { headers });
+  }
+  const row = await env.DB.prepare("SELECT COUNT(*) as visits, MAX(visited_at) as last_time FROM visits").first();
+  return new Response(JSON.stringify(row || { visits: 0, last_time: 0 }), { headers });
 }
 
 export async function onRequestPost({ request, env }) {
