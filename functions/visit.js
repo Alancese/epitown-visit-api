@@ -1,3 +1,4 @@
+// EpiTown visit tracking endpoint
 const SITE_ORIGIN = "https://alancese.github.io";
 
 export function onRequestGet() {
